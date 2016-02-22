@@ -19,31 +19,28 @@ class Node {
     }
 }
 
-def preOrderPrint
-preOrderPrint = { Node node, int depth=0 ->
+public void preOrderPrint( Node node, int depth=0 ) {
     if (depth > 1) print("  " * depth)
     if (depth > 0) print "|---"
     println node
     ++depth
     if (node?.leftChild) preOrderPrint( node.leftChild, depth )
     if (node?.rightChild) preOrderPrint( node.rightChild, depth )
-}.trampoline()
+}
 
 
-def inOrderPrint
-inOrderPrint = { Node node ->
+public void inOrderPrint( Node node ) {
     if (node?.leftChild) inOrderPrint( node.leftChild )
     println node
     if (node?.rightChild) inOrderPrint( node.rightChild )
-}.trampoline()
+}
 
 
-def postOrderPrint
-postOrderPrint = { Node node ->
+public void postOrderPrint( Node node ) {
     if (node?.leftChild) postOrderPrint( node.leftChild )
     if (node?.rightChild) postOrderPrint( node.rightChild )
     println node
-}.trampoline()
+}
 
 
 def a = new Node(value: 1)
