@@ -27,15 +27,14 @@ class Node {
     }
 }
 
-def preOrderPrint
-preOrderPrint = { Node node, int depth=0 ->
+public void preOrderPrint( Node node, int depth=0 ) {
     if (depth > 1) print("  " * depth)
     if (depth > 0) print "|---"
     println node
     ++depth
     if (node?.leftChild) preOrderPrint( node.leftChild, depth )
     if (node?.rightChild) preOrderPrint( node.rightChild, depth )
-}.trampoline()
+}
 
 
 def tree = new Node(1,
