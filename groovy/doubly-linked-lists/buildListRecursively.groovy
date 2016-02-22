@@ -11,19 +11,13 @@ class Node {
 def printNode
 printNode = { Node node ->
   print "[${node?.prev}]${node}[${node?.next}] "
-  if (node?.next) printNode( node.next )
+  if (node?.next) printNode.trampoline( node.next )
   else println "\n"
 }.trampoline()
 
 
-public Node buildList(List values) {
-    if (! values) return null
-    def first = new Node(value: values[0])
-    recurse(values, values.size(), 1, first)
-    return first
-}
-
-public void recurse(List values, int size, int iter, Node head) {
+def recurse
+recurse = { List values, int size, int iter, Node head ->
     if (iter >= size) {
         // all values have been processed
         return
@@ -35,8 +29,16 @@ public void recurse(List values, int size, int iter, Node head) {
         n.prev = head
 
         // continue working through the list
-        recurse(values, size, iter+1, n)
+        recurse.trampoline(values, size, iter+1, n)
     }
+}.trampoline()
+
+
+def buildList = { List values ->
+    if (! values) return null
+    def first = new Node(value: values[0])
+    recurse(values, values.size(), 1, first)
+    return first
 }
 
 
@@ -51,3 +53,6 @@ printNode(buildList([]))
 printNode(buildList(['x']))
 
 printNode(buildList(null))
+
+Node allTheBenjamins = buildList((1..10000).toList())
+printNode(allTheBenjamins)
