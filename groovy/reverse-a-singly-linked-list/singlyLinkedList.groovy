@@ -5,34 +5,44 @@
 // but doesn't work in a real-world scenario because it's prone to stack overflow errors.
 
 class Node {
+  Node() { }
+  Node(Integer value, Node next = null) {
+    this.i = value
+    this.next = next
+  }
+
   Node next
   Integer i
   String toString() { i as String }
 }
 
-def a = new Node(i:1)
-def b = new Node(i:2)
-def c = new Node(i:3)
-def d = new Node(i:4)
-def e = new Node(i:5)
+def tail = new Node(5)
+def head = new Node(1, new Node(2, new Node(3, new Node(4, tail))))
 
-a.next = b
-b.next = c
-c.next = d
-d.next = e
 
 def printNode
 printNode = { Node node ->
   print "${node}[${node?.next}] "
-  if ( node?.next ) printNode( node.next )
+  if ( node?.next ) printNode.trampoline( node.next )
   else println "\n"
 }.trampoline()
 
 println "original linked list: "
-printNode( a )
+printNode( head )
 
 
-public void reverse(Node first) {
+// tail recursive method
+def recurse
+recurse = { Node previous, Node current, Node next ->
+  def third = next?.next
+  // swap the pointers as we go
+  next?.next = current
+  current.next = previous
+  if ( third )
+    recurse.trampoline( current, next, third )
+}.trampoline()
+
+def reverse = { Node first ->
   // if empty input or only a single node, nothing to do
   if ( ! first?.next ) return
 
@@ -46,17 +56,30 @@ public void reverse(Node first) {
     recurse( first, second, third )
 }
 
-// tail recursive method
-public void recurse( Node previous, Node current, Node next ) {
-  def third = next?.next
-  // swap the pointers as we go
-  next?.next = current
-  current.next = previous
-  if ( third )
-    recurse( current, next, third )
-}
-
-reverse( a )
+reverse( head )
 
 println "reversed linked list: "
-printNode( e )
+printNode( tail )
+
+
+// create a big list then reverse it to verify we're avoiding stack overflows
+
+def createLinkedList
+createLinkedList = { Node n, int listLength, int step = 0 ->
+  if (step >= listLength) return n
+
+  Node next = new Node(++step)
+  n.next = next
+
+  createLinkedList.trampoline(next, listLength, step)
+}.trampoline()
+
+
+def head2 = new Node(0)
+Node tail2 = createLinkedList(head2, 10000)
+
+//printNode(head2)
+
+reverse( head2 )
+
+printNode( tail2 )
