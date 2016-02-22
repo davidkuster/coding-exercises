@@ -21,7 +21,8 @@ class Node {
 
 def preOrderPrint
 preOrderPrint = { Node node, int depth=0 ->
-    if (node.parent)  print ("--" * depth)
+    if (depth > 1) print("  " * depth)
+    if (depth > 0) print "|---"
     println node
     ++depth
     if (node?.leftChild) preOrderPrint( node.leftChild, depth )
