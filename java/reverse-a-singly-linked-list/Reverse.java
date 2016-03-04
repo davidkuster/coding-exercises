@@ -3,19 +3,24 @@
 public class Reverse {
 
     public static void main(String[] args) {
-        // reverse a small list
+        reverseSmallList();
+        reverseLargeList();
+    }
+
+    private static void reverseSmallList() {
         Node tail = new Node(5);
         Node head = new Node(1, new Node(2, new Node(3, new Node(4, tail))));
         reverseList(head, tail);
+    }
 
-        // reverse a large list
+    private static void reverseLargeList() {
         Node head2 = new Node(0);
         //Node tail = Node.createList(head, 10000, 0);  // hits a stack overflow ~5500
         Node tail2 = Node.createList(head2, 2000, 0);
         reverseList(head2, tail2);
     }
 
-    public static void reverseList(Node head, Node tail) {
+    private static void reverseList(Node head, Node tail) {
         System.out.println("Original list:");
         Node.printNode(head);
 
